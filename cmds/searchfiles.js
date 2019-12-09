@@ -14,7 +14,7 @@ module.exports = {
 
         message.guild.channels.get(config.Repository).messages.map(a => {
             if (a.attachments.size) {
-                msgAttachments.push(a.attachments.first().filename.toLowerCase());
+                msgAttachments.push(a.attachments.first().filename);
                 msgUrl.push(a.url);
             }
         });
@@ -22,7 +22,7 @@ module.exports = {
         const embed = new Discord.RichEmbed().setTitle('Setup search results').setColor('#FF5555');
 
         for (const [i, f] of msgAttachments.entries()) {
-            if (args.every(subs => f.includes(subs))) {
+            if (args.every(subs => f.toLowerCase().includes(subs))) {
                 console.log(f);
                 embed.addField(msgAttachments[i], msgUrl[i]);
             }
