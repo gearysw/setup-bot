@@ -11,6 +11,9 @@ module.exports = {
     execute: async (bot, message, args) => {
         let msgAttachments = [];
         let msgUrl = [];
+        bot.guilds.get(config.CARLServer).channels.get(config.Repository).fetchMessages({
+            limit: 100
+        });
 
         message.guild.channels.get(config.Repository).messages.map(a => {
             if (a.attachments.size) {
@@ -20,12 +23,14 @@ module.exports = {
         });
 
         const embed = new Discord.RichEmbed().setTitle('Setup search results').setColor('#FF5555');
-
+        let k = 0;
         for (const [i, f] of msgAttachments.entries()) {
             if (args.every(subs => f.toLowerCase().includes(subs))) {
                 console.log(f);
                 embed.addField(msgAttachments[i], msgUrl[i]);
+                k++;
             }
+            if (k === 25) break;
         }
         message.channel.send(embed);
     }

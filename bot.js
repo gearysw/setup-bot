@@ -6,7 +6,8 @@ const {
 } = require('./config.json');
 const Discord = require('discord.js');
 const bot = new Discord.Client({
-    disableEveryone: true
+    disableEveryone: true,
+    messageCacheMaxSize: 500
 });
 const fs = require('fs');
 
@@ -50,14 +51,14 @@ bot.on('message', async (message) => {
     const commandName = args.shift();
 
     if (commandName.startsWith(prefix)) { //* dynamic command handler
-        const cmds = commandName.slice(prefix.length);
-        const command = bot.commands.get(cmds) || bot.commands.find(cmd => cmd.aliases && cmd.aliases.includes(cmds));
         try {
-            if (command.args && !args.length) {
-                message.channel.send('You need to provide arguments for that command.');
-            } else {
-                command.execute(bot, message, args);
-            }
+            const cmds = commandName.slice(prefix.length);
+            const command = bot.commands.get(cmds) || bot.commands.find(cmd => cmd.aliases && cmd.aliases.includes(cmds));
+            if (cmds.includes(prefix)) return;
+            if (!command) return (message.channel.send('That command does not exist.'));
+            if (command.args && !args.length) return message.channel.send('You need to provide arguments for that command.');
+
+            command.execute(message, args);
         } catch (error) {
             console.error(error);
             message.channel.send('There was an error executing that command.');
