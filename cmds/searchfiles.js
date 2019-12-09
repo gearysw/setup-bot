@@ -47,6 +47,7 @@ module.exports = {
             }
             if (k === 25) break;
         }
+        if (!embed.fields.length) return message.channel.send('No results found.');
         message.channel.send(embed);
     }
 }
