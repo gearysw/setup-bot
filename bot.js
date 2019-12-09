@@ -44,12 +44,6 @@ bot.on('ready', async () => {
     })).then(fetched3 => bot.guilds.get(CARLServer).channels.get(Repository).fetchMessages({
         limit: 100,
         before: fetched3.last().id
-    })).then(fetched4 => bot.guilds.get(CARLServer).channels.get(Repository).fetchMessages({
-        limit: 100,
-        before: fetched4.last().id
-    })).then(fetched5 => bot.guilds.get(CARLServer).channels.get(Repository).fetchMessages({
-        limit: 100,
-        before: fetched5.last().id
     })).catch(console.error);
 });
 
