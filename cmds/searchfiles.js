@@ -25,7 +25,7 @@ module.exports = {
         const embed = new Discord.RichEmbed().setTitle('Setup search results').setColor('#FF5555');
         let k = 0;
         for (const [i, f] of msgAttachments.entries()) {
-            if (args.every(subs => f.toLowerCase().includes(subs))) {
+            if (args.every(subs => f.toLowerCase().includes(subs.toLowerCase()))) {
                 console.log(f);
                 embed.addField(msgAttachments[i], msgUrl[i]);
                 k++;
