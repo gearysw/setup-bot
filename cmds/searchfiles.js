@@ -8,7 +8,7 @@ module.exports = {
     args: true,
     easteregg: false,
     usage: '<search term>',
-    execute: async (message, args) => {
+    execute: async (bot, message, args) => {
         let msgAttachments = [];
         let msgUrl = [];
 
