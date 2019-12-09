@@ -20,7 +20,7 @@ for (const file of commandFiles) {
     console.log(`${command.name} loaded`);
 }
 
-bot.login(token);
+bot.login(process.env.BOT_TOKEN);
 
 bot.on('ready', async () => {
     console.log(`Bot logged in as ${bot.user.username}`);
