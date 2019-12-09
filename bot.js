@@ -63,7 +63,7 @@ bot.on('message', async (message) => {
             if (!command) return (message.channel.send('That command does not exist.'));
             if (command.args && !args.length) return message.channel.send('You need to provide arguments for that command.');
 
-            command.execute(message, args);
+            command.execute(bot, message, args);
         } catch (error) {
             console.error(error);
             message.channel.send('There was an error executing that command.');
