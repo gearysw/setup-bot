@@ -16,6 +16,15 @@ module.exports = {
         }).then(fetched1 => bot.guilds.get(config.CARLServer).channels.get(config.Repository).fetchMessages({
             limit: 100,
             before: fetched1.last().id
+        })).then(fetched2 => bot.guilds.get(config.CARLServer).channels.get(config.Repository).fetchMessages({
+            limit: 100,
+            before: fetched2.last().id
+        })).then(fetched3 => bot.guilds.get(config.CARLServer).channels.get(config.Repository).fetchMessages({
+            limit: 100,
+            before: fetched3.last().id
+        })).then(fetched4 => bot.guilds.get(config.CARLServer).channels.get(config.Repository).fetchMessages({
+            limit: 100,
+            before: fetched4.last().id
         })).catch(console.error);
 
         message.guild.channels.get(config.Repository).messages.map(a => {
