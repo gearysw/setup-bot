@@ -33,13 +33,24 @@ bot.on('ready', async () => {
     // } catch (error) {
     //     console.error(error);
     // }
-    try {
-        bot.guilds.get(CARLServer).channels.get(Repository).fetchMessages({
-            limit: 100
-        });
-    } catch (error) {
-        console.error(error);
-    }
+    bot.guilds.get(CARLServer).channels.get(Repository).fetchMessages({
+        limit: 100
+    }).then(fetched1 => bot.guilds.get(CARLServer).channels.get(Repository).fetchMessages({
+        limit: 100,
+        before: fetched1.last().id
+    })).then(fetched2 => bot.guilds.get(CARLServer).channels.get(Repository).fetchMessages({
+        limit: 100,
+        before: fetched2.last().id
+    })).then(fetched3 => bot.guilds.get(CARLServer).channels.get(Repository).fetchMessages({
+        limit: 100,
+        before: fetched3.last().id
+    })).then(fetched4 => bot.guilds.get(CARLServer).channels.get(Repository).fetchMessages({
+        limit: 100,
+        before: fetched4.last().id
+    })).then(fetched5 => bot.guilds.get(CARLServer).channels.get(Repository).fetchMessages({
+        limit: 100,
+        before: fetched5.last().id
+    })).catch(console.error);
 });
 
 bot.on('message', async (message) => {
