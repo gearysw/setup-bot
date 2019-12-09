@@ -1,0 +1,22 @@
+{
+  "name": "setup-bot",
+  "version": "1.0.0",
+  "description": "",
+  "main": "bot.js",
+  "scripts": {
+    "start": "node bot.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/gearysw/setup-bot.git"
+  },
+  "author": "Geary Wariwisaya",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/gearysw/setup-bot/issues"
+  },
+  "homepage": "https://github.com/gearysw/setup-bot#readme",
+  "dependencies": {
+    "discord.js": "^11.5.1"
+  }
+}
