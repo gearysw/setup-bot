@@ -9,6 +9,7 @@ module.exports = {
     easteregg: false,
     usage: '<search term>',
     execute: async (bot, message, args) => {
+        const searching = await message.channel.send('Searching...');
         let msgAttachments = [];
         let msgUrl = [];
         bot.guilds.get(config.CARLServer).channels.get(config.Repository).fetchMessages({
@@ -44,7 +45,8 @@ module.exports = {
             }
             if (k === 25) break;
         }
-        if (!embed.fields.length) return message.channel.send('No results found.');
+        if (!embed.fields.length) return searching.edit('No results found.').then(searching.delete(5000));
+        searching.edit('Found!').then(searching.delete(5000));
         message.channel.send(embed);
     }
 }

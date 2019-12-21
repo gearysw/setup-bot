@@ -66,13 +66,14 @@ bot.on('message', async (message) => {
             const cmds = commandName.slice(prefix.length);
             const command = bot.commands.get(cmds) || bot.commands.find(cmd => cmd.aliases && cmd.aliases.includes(cmds));
             if (cmds.includes(prefix)) return;
-            if (!command) return (message.channel.send('That command does not exist.'));
+            if (!command) return;
             if (command.args && !args.length) return message.channel.send('You need to provide arguments for that command.');
 
             command.execute(bot, message, args);
         } catch (error) {
             console.error(error);
-            message.channel.send('There was an error executing that command.');
+            message.channel.send('Helpful error message');
+            message.guild.members.get('197530293597372416').send(error);
         }
     }
 });
