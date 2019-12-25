@@ -1,9 +1,4 @@
-const {
-    token,
-    prefix,
-    CARLServer,
-    Repository
-} = require('./config.json');
+const { token, prefix, CARLServer, Repository } = require('./config.json');
 const Discord = require('discord.js');
 const bot = new Discord.Client({
     disableEveryone: true,

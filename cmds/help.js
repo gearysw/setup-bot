@@ -1,6 +1,4 @@
-const {
-    prefix
-} = require('../config.json');
+const { prefix } = require('../config.json');
 const Discord = require('discord.js');
 
 module.exports = {
@@ -10,10 +8,9 @@ module.exports = {
     args: false,
     usage: '[command name]',
     execute: async (bot, message, args) => {
-        let cmd = [];
         let usage = [];
         let cmdDesc = [];
-        const CA = bot.commands.map(c => {
+        bot.commands.map(c => {
             if (!c.easteregg && c.easteregg != undefined) {
                 usage.push(`${prefix}${c.name} ${c.usage}`);
                 cmdDesc.push(c.description);
@@ -27,6 +24,5 @@ module.exports = {
         }
 
         message.channel.send(embed);
-
     }
 }

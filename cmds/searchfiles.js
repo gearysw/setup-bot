@@ -4,11 +4,20 @@ const config = require('../config.json');
 module.exports = {
     name: 'search',
     aliases: ['searchfiles', 'filesearch', 'files'],
-    description: 'Searches through a channel for files with the search term',
-    args: true,
+    description: 'Searches through the repository for files with the search term(s)',
+    args: false,
     easteregg: false,
     usage: '<search term>',
     execute: async (bot, message, args) => {
+        if (!args.length) {
+            const helpEmbed = new Discord.RichEmbed()
+                .setColor('#ff5555')
+                .setTitle('Searching for setups')
+                .setDescription(`Search for setups by typing \`${config.prefix}search <terms>\`\nDiscord only supports up to 25 embed fields, so only the latest 25 setups is shown.`);
+
+            return message.channel.send(helpEmbed);
+        }
+
         const searching = await message.channel.send('Searching...');
         let msgAttachments = [];
         let msgUrl = [];
@@ -35,7 +44,7 @@ module.exports = {
             }
         });
 
-        const embed = new Discord.RichEmbed().setTitle('Setup search results').setColor('#FF5555');
+        const embed = new Discord.RichEmbed().setTitle('Setup search results').setColor('#FF5555').setFooter('Only up to 25 latest setups shown due to Discord limitations');
         let k = 0;
         for (const [i, f] of msgAttachments.entries()) {
             if (args.every(subs => f.toLowerCase().includes(subs.toLowerCase()))) {
