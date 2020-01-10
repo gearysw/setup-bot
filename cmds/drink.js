@@ -9,7 +9,7 @@ module.exports = {
     easteregg: true,
     usage: '<number> | leaderboard',
     execute: async (bot, message, args) => {
-        if (!args.length || isNaN(args[0])) {
+        if (!args.length) {
             fs.readFile('./drinks.json', (err, data) => {
                 if (err) return console.error(err);
                 let json = JSON.parse(data);
