@@ -29,7 +29,7 @@ module.exports = {
                     fs.writeFile('./drinks.json', JSON.stringify(json), err => {
                         if (err) return console.error(err);
                         message.channel.send(`${NAME} drowns his sorrows with a drink. He's now tracked 1 drink.`);
-                    }).catch(console.error);
+                    });
                 } else {
                     let Drinks = json[objIndex].drinks + 1;
 
@@ -47,9 +47,9 @@ module.exports = {
                     fs.writeFile('./drinks.json', JSON.stringify(updatedDrinks), err => {
                         if (err) return console.error(err);
                         message.channel.send(`${NAME} drowns his sorrows with a drink. He's now tracked ${Drinks} drinks.`);
-                    }).catch(console.error);
+                    });
                 }
-            }).catch(console.error);
+            });
         }
         if (args[0]) {
             if (isNaN(args[0])) {
@@ -76,7 +76,7 @@ module.exports = {
                             .addField('Total Drinks', `CARL has collectively drowned their sorrows with ${totalDrinks} drinks.`);
 
                         message.channel.send(leaderboardEmbed);
-                    }).catch(console.error);
+                    });
                 } else {
                     fs.readFile('./drinks.json', (err, data) => {
                         if (err) return console.error(err);
@@ -97,7 +97,7 @@ module.exports = {
                             fs.writeFile('./drinks.json', JSON.stringify(json), err => {
                                 if (err) return console.error(err);
                                 message.channel.send(`${NAME} drowns his sorrows with a drink. He's now tracked 1 drink.`);
-                            }).catch(console.error);
+                            });
                         } else {
                             let Drinks = json[objIndex].drinks + 1;
 
@@ -115,9 +115,9 @@ module.exports = {
                             fs.writeFile('./drinks.json', JSON.stringify(updatedDrinks), err => {
                                 if (err) return console.error(err);
                                 message.channel.send(`${NAME} drowns his sorrows with a drink. He's now tracked ${Drinks} drinks.`);
-                            }).catch(console.error);
+                            });
                         }
-                    }).catch(console.error);
+                    });
                 }
             } else if (!isNaN(args[0])) {
                 fs.readFile('./drinks.json', (err, data) => {
@@ -149,7 +149,7 @@ module.exports = {
                         fs.writeFile('./drinks.json', JSON.stringify(json), err => {
                             if (err) return console.error(err);
                             message.channel.send(reply);
-                        }).catch(console.error);
+                        });
                     } else {
                         let Drinks = json[objIndex].drinks;
                         let reply;
@@ -177,9 +177,9 @@ module.exports = {
                         fs.writeFile('./drinks.json', JSON.stringify(updatedDrinks), err => {
                             if (err) return console.error(err);
                             message.channel.send(reply);
-                        }).catch(console.error);
+                        });
                     }
-                }).catch(console.error);
+                });
             }
         }
     }
