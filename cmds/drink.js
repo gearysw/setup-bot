@@ -28,7 +28,12 @@ module.exports = {
                     json.push(trackDrink);
                     fs.writeFile('./drinks.json', JSON.stringify(json), err => {
                         if (err) return console.error(err);
-                        message.channel.send(`${NAME} drowns his sorrows with a drink. He's now tracked 1 drink.`);
+                        const replies = [
+                            `${NAME} drowns his sorrows with a drink. He's now tracked 1 drink.`,
+                            `${NAME} drinks his sorrows away. He's now taken 1 drink.`,
+                            `${NAME} took a swig. He now has 1 drink under his belt.`
+                        ];
+                        message.channel.send(replies[Math.floor(Math.random() * replies.length)]);
                     });
                 } else {
                     let Drinks = json[objIndex].drinks + 1;
@@ -46,7 +51,12 @@ module.exports = {
 
                     fs.writeFile('./drinks.json', JSON.stringify(updatedDrinks), err => {
                         if (err) return console.error(err);
-                        message.channel.send(`${NAME} drowns his sorrows with a drink. He's now tracked ${Drinks} drinks.`);
+                        const replies = [
+                            `${NAME} drowns his sorrows with a drink. He's now tracked ${Drinks} drinks.`,
+                            `${NAME} drinks his sorrows away. He's now downed ${Drinks} drinks.`,
+                            `${NAME} took a swig. He's now had ${Drinks} drinks.`
+                        ];
+                        message.channel.send(replies[Math.floor(Math.random() * replies.length)]);
                     });
                 }
             });
@@ -96,7 +106,12 @@ module.exports = {
                             json.push(trackDrink);
                             fs.writeFile('./drinks.json', JSON.stringify(json), err => {
                                 if (err) return console.error(err);
-                                message.channel.send(`${NAME} drowns his sorrows with a drink. He's now tracked 1 drink.`);
+                                const replies = [
+                                    `${NAME} drowns his sorrows with a drink. He's now tracked 1 drink.`,
+                                    `${NAME} drinks his sorrows away. He's now taken 1 drink.`,
+                                    `${NAME} took a swig. He now has 1 drink under his belt.`
+                                ];
+                                message.channel.send(replies[Math.floor(Math.random() * replies.length)]);
                             });
                         } else {
                             let Drinks = json[objIndex].drinks + 1;
@@ -114,7 +129,12 @@ module.exports = {
 
                             fs.writeFile('./drinks.json', JSON.stringify(updatedDrinks), err => {
                                 if (err) return console.error(err);
-                                message.channel.send(`${NAME} drowns his sorrows with a drink. He's now tracked ${Drinks} drinks.`);
+                                const replies = [
+                                    `${NAME} drowns his sorrows with a drink. He's now tracked ${Drinks} drinks.`,
+                                    `${NAME} drinks his sorrows away. He's now downed ${Drinks} drinks.`,
+                                    `${NAME} took a swig. He's now had ${Drinks} drinks.`
+                                ];
+                                message.channel.send(replies[Math.floor(Math.random() * replies.length)]);
                             });
                         }
                     });
@@ -134,9 +154,17 @@ module.exports = {
 
                         if (args[0] <= 0) return message.channel.send(`You can't do that!`);
                         if (args[0] === '1') {
-                            reply = `${NAME} drowns his sorrows with a drink. He's now tracked 1 drink.`;
+                            reply = [
+                                `${NAME} drowns his sorrows with a drink. He's now tracked 1 drink.`,
+                                `${NAME} drinks his sorrows away. He's now taken 1 drink.`,
+                                `${NAME} took a swig. He now has 1 drink under his belt.`
+                            ];
                         } else if (args[0] > 1) {
-                            reply = `${NAME} drowns his sorrows with ${args[0]} drinks. He's now tracked ${args[0]} drinks.`;
+                            reply = [
+                                `${NAME} drowns his sorrows with ${args[0]} drinks. He's now tracked ${args[0]} drinks.`,
+                                `${NAME} drinks his sorrows away with ${args[0]} swigs. He's now downed ${args[0]} drinks.`,
+                                `${NAME} took ${args[0]} swigs. He's now had ${args[0]} drinks.`
+                            ];
                         }
 
                         const trackDrink = {
@@ -148,7 +176,7 @@ module.exports = {
                         json.push(trackDrink);
                         fs.writeFile('./drinks.json', JSON.stringify(json), err => {
                             if (err) return console.error(err);
-                            message.channel.send(reply);
+                            message.channel.send(reply[Math.floor(Math.random() * replies.length)]);
                         });
                     } else {
                         let Drinks = json[objIndex].drinks;
@@ -157,10 +185,18 @@ module.exports = {
                         if (args[0] <= 0) return message.channel.send(`You can't do that!`);
                         if (args[0] === '1') {
                             Drinks = Drinks + 1;
-                            reply = `${NAME} drowns his sorrows with a drink. He's now tracked ${Drinks} drinks.`;
+                            reply = [
+                                `${NAME} drowns his sorrows with a drink. He's now tracked ${Drinks} drinks.`,
+                                `${NAME} drinks his sorrows away. He's now downed ${Drinks} drinks.`,
+                                `${NAME} took a swig. He's now had ${Drinks} drinks.`
+                            ];
                         } else if (args[0] > 1) {
                             Drinks = Drinks + parseInt(args[0]);
-                            reply = `${NAME} drowns his sorrows with ${args[0]} drinks. He's now tracked ${Drinks} drinks.`;
+                            reply = [
+                                `${NAME} drowns his sorrows with ${args[0]} drinks. He's now tracked ${Drinks} drinks.`,
+                                `${NAME} drinks his sorrows away with ${args[0]} swigs. He's now downed ${Drinks} drinks.`,
+                                `${NAME} took ${args[0]} swigs. He's now had ${Drinks} drinks.`
+                            ];
                         }
 
                         const trackDrink = {
@@ -176,7 +212,7 @@ module.exports = {
 
                         fs.writeFile('./drinks.json', JSON.stringify(updatedDrinks), err => {
                             if (err) return console.error(err);
-                            message.channel.send(reply);
+                            message.channel.send(reply[Math.floor(Math.random() * replies.length)]);
                         });
                     }
                 });
