@@ -21,7 +21,7 @@ bot.login(token);
 bot.on('ready', async () => {
     console.log(`Bot logged in as ${bot.user.username}`);
     console.log(bot.guilds.first().name);
-    bot.guilds.get(config.CARLServer).members.get(bot.user.id).setNickname('Democratic Bot').catch(console.error);
+    bot.guilds.get(CARLServer).members.get(bot.user.id).setNickname('Democratic Bot').catch(console.error);
 
     // try {
     //     const invite = await bot.generateInvite(['SEND_MESSAGES', 'EMBED_LINKS', 'ATTACH_FILES', 'READ_MESSAGE_HISTORY']);
