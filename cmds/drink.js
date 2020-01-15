@@ -176,7 +176,7 @@ module.exports = {
                         json.push(trackDrink);
                         fs.writeFile('./drinks.json', JSON.stringify(json), err => {
                             if (err) return console.error(err);
-                            message.channel.send(reply[Math.floor(Math.random() * replies.length)]);
+                            message.channel.send(reply[Math.floor(Math.random() * reply.length)]);
                         });
                     } else {
                         let Drinks = json[objIndex].drinks;
@@ -212,7 +212,7 @@ module.exports = {
 
                         fs.writeFile('./drinks.json', JSON.stringify(updatedDrinks), err => {
                             if (err) return console.error(err);
-                            message.channel.send(reply[Math.floor(Math.random() * replies.length)]);
+                            message.channel.send(reply[Math.floor(Math.random() * reply.length)]);
                         });
                     }
                 });
