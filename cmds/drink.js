@@ -161,9 +161,9 @@ module.exports = {
                             ];
                         } else if (args[0] > 1) {
                             reply = [
-                                `${NAME} drowns his sorrows with ${args[0]} drinks. He's now tracked ${args[0]} drinks.`,
-                                `${NAME} drinks his sorrows away with ${args[0]} swigs. He's now downed ${args[0]} drinks.`,
-                                `${NAME} took ${args[0]} swigs. He's now had ${args[0]} drinks.`
+                                `${NAME} drowns his sorrows with ${parseInt(args[0])} drinks. He's now tracked ${parseInt(args[0])} drinks.`,
+                                `${NAME} drinks his sorrows away with ${parseInt(args[0])} swigs. He's now downed ${parseInt(args[0])} drinks.`,
+                                `${NAME} took ${parseInt(args[0])} swigs. He's now had ${parseInt(args[0])} drinks.`
                             ];
                         }
 
@@ -193,11 +193,11 @@ module.exports = {
                         } else if (args[0] > 1) {
                             Drinks = Drinks + parseInt(args[0]);
                             reply = [
-                                `${NAME} drowns his sorrows with ${args[0]} drinks. He's now tracked ${Drinks} drinks.`,
-                                `${NAME} drinks his sorrows away with ${args[0]} swigs. He's now downed ${Drinks} drinks.`,
-                                `${NAME} took ${args[0]} swigs. He's now had ${Drinks} drinks.`
+                                `${NAME} drowns his sorrows with ${parseInt(args[0])} drinks. He's now tracked ${Drinks} drinks.`,
+                                `${NAME} drinks his sorrows away with ${parseInt(args[0])} swigs. He's now downed ${Drinks} drinks.`,
+                                `${NAME} took ${parseInt(args[0])} swigs. He's now had ${Drinks} drinks.`
                             ];
-                        }
+                        } else return message.channel.send(`You can't do that!`);
 
                         const trackDrink = {
                             "id": ID,
