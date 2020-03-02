@@ -56,7 +56,7 @@ module.exports = {
         let k = 0;
         for (const [i, f] of msgAttachments.entries()) {
             if (args.every(subs => f.toLowerCase().includes(subs.toLowerCase()))) {
-                console.log(f);
+                // console.log(f);
                 embed.addField(msgAttachments[i], msgUrl[i]);
                 k++;
             }
