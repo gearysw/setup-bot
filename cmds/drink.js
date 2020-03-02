@@ -26,7 +26,7 @@ module.exports = {
                     };
 
                     json.push(trackDrink);
-                    fs.writeFile('./drinks.json', JSON.stringify(json), err => {
+                    fs.writeFile('./drinks.json', JSON.stringify(json, null, '\t'), err => {
                         if (err) return console.error(err);
                         const replies = [
                             `${NAME} drowns his sorrows with a drink. He's now tracked 1 drink.`,
@@ -49,7 +49,7 @@ module.exports = {
                         ...json.slice(objIndex + 1),
                     ];
 
-                    fs.writeFile('./drinks.json', JSON.stringify(updatedDrinks), err => {
+                    fs.writeFile('./drinks.json', JSON.stringify(updatedDrinks, null, '\t'), err => {
                         if (err) return console.error(err);
                         const replies = [
                             `${NAME} drowns his sorrows with a drink. He's now tracked ${Drinks} drinks.`,
@@ -104,7 +104,7 @@ module.exports = {
                             };
 
                             json.push(trackDrink);
-                            fs.writeFile('./drinks.json', JSON.stringify(json), err => {
+                            fs.writeFile('./drinks.json', JSON.stringify(json, null, '\t'), err => {
                                 if (err) return console.error(err);
                                 const replies = [
                                     `${NAME} drowns his sorrows with a drink. He's now tracked 1 drink.`,
@@ -127,7 +127,7 @@ module.exports = {
                                 ...json.slice(objIndex + 1),
                             ];
 
-                            fs.writeFile('./drinks.json', JSON.stringify(updatedDrinks), err => {
+                            fs.writeFile('./drinks.json', JSON.stringify(updatedDrinks, null, '\t'), err => {
                                 if (err) return console.error(err);
                                 const replies = [
                                     `${NAME} drowns his sorrows with a drink. He's now tracked ${Drinks} drinks.`,
@@ -174,7 +174,7 @@ module.exports = {
                         };
 
                         json.push(trackDrink);
-                        fs.writeFile('./drinks.json', JSON.stringify(json), err => {
+                        fs.writeFile('./drinks.json', JSON.stringify(json, null, '\t'), err => {
                             if (err) return console.error(err);
                             message.channel.send(reply[Math.floor(Math.random() * reply.length)]);
                         });
@@ -210,7 +210,7 @@ module.exports = {
                             ...json.slice(objIndex + 1),
                         ];
 
-                        fs.writeFile('./drinks.json', JSON.stringify(updatedDrinks), err => {
+                        fs.writeFile('./drinks.json', JSON.stringify(updatedDrinks, null, '\t'), err => {
                             if (err) return console.error(err);
                             message.channel.send(reply[Math.floor(Math.random() * reply.length)]);
                         });
