@@ -1,5 +1,7 @@
 const Discord = require('discord.js');
 const config = require('../config.json');
+const fs = require('fs');
+const { date } = require('../filterdate.json');
 
 module.exports = {
     name: 'search',
@@ -13,9 +15,25 @@ module.exports = {
             const helpEmbed = new Discord.RichEmbed()
                 .setColor('#ff5555')
                 .setTitle('Searching for setups')
-                .setDescription(`Search for setups by typing \`${config.prefix}search <terms>\`\nDiscord only supports up to 25 embed fields, so only the latest 25 setups is shown.`);
+                .setDescription(`Search for setups by typing \`${config.prefix}search <terms>\`\nUpdate the filter date by typing \`${config.prefix}search filterdate <date>\`. This makes sure the bot only searches for files uploaded after the given date.\nDiscord only supports up to 25 embed fields, so only the latest 25 setups is shown.`);
 
             return message.channel.send(helpEmbed);
+        }
+
+        if (args[0] === 'filterdate') {
+            const newDate = Date.parse(args.slice(1).join(' '));
+            fs.readFile('./filterdate.json', (err, data) => {
+                if (err) return console.error(err);
+                let json = JSON.parse(data);
+
+                json["date"] = newDate;
+                fs.writeFile('./filterdate.json', JSON.stringify(json, null, '\t'), err => {
+                    if (err) return console.error(err);
+                    const dateString = new Date(newDate);
+                    message.channel.send(`Filter date updated: ${dateString.toUTCString()}`);
+                });
+            });
+            return;
         }
 
         const searching = await message.channel.send('Searching...');
@@ -38,7 +56,7 @@ module.exports = {
         })).catch(console.error);
 
         message.guild.channels.get(config.Repository).messages.map(a => {
-            if (a.attachments.size) {
+            if (a.attachments.size && a.createdTimestamp > date) {
                 msgAttachments.push(a.attachments.first().filename);
                 msgUrl.push(a.url);
             }
