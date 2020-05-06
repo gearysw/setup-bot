@@ -79,7 +79,7 @@ module.exports = {
                         }
                         const totalDrinks = sorted.map(s => s.drinks).reduce((a, b) => a + b);
 
-                        const leaderboardEmbed = new Discord.RichEmbed()
+                        const leaderboardEmbed = new Discord.MessageEmbed()
                             .setTitle('Drinks Leaderboard')
                             .setDescription(leaderboard)
                             .setColor('#FF5555')

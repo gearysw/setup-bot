@@ -17,7 +17,7 @@ module.exports = {
             }
         });
 
-        const embed = new Discord.RichEmbed().setTitle('Setup Bot Commands').setColor('#FF5555');
+        const embed = new Discord.MessageEmbed().setTitle('Setup Bot Commands').setColor('#FF5555');
 
         for (let i = 0; i < usage.length; i++) {
             embed.addField(usage[i], cmdDesc[i]);

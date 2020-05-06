@@ -12,7 +12,7 @@ module.exports = {
     usage: '<search terms>',
     execute: async (bot, message, args) => {
         if (!args.length) {
-            const helpEmbed = new Discord.RichEmbed()
+            const helpEmbed = new Discord.MessageEmbed()
                 .setColor('#ff5555')
                 .setTitle('Searching for setups')
                 .setDescription(`Search for setups by typing \`${config.prefix}search <terms>\`\nUpdate the filter date by typing \`${config.prefix}search filterdate <date>\`. This makes sure the bot only searches for files uploaded after the given date.\nDiscord only supports up to 25 embed fields, so only the latest 25 setups is shown.`);
@@ -21,6 +21,15 @@ module.exports = {
         }
 
         if (args[0] === 'filterdate') {
+            if (!args[1]) {
+                fs.readFile('./filterdate.json', (err, data) => {
+                    if (err) return console.error(err);
+                    const json = JSON.parse(data);
+                    const dateString = new Date(json.date);
+                    message.channel.send(`Current filter date: ${dateString.toUTCString()}`);
+                });
+                return;
+            }
             const newDate = Date.parse(args.slice(1).join(' '));
             fs.readFile('./filterdate.json', (err, data) => {
                 if (err) return console.error(err);
@@ -39,30 +48,22 @@ module.exports = {
         const searching = await message.channel.send('Searching...');
         let msgAttachments = [];
         let msgUrl = [];
-        bot.guilds.get(config.CARLServer).channels.get(config.Repository).fetchMessages({
-            limit: 100
-        }).then(fetched1 => bot.guilds.get(config.CARLServer).channels.get(config.Repository).fetchMessages({
-            limit: 100,
-            before: fetched1.last().id
-        })).then(fetched2 => bot.guilds.get(config.CARLServer).channels.get(config.Repository).fetchMessages({
-            limit: 100,
-            before: fetched2.last().id
-        })).then(fetched3 => bot.guilds.get(config.CARLServer).channels.get(config.Repository).fetchMessages({
-            limit: 100,
-            before: fetched3.last().id
-        })).then(fetched4 => bot.guilds.get(config.CARLServer).channels.get(config.Repository).fetchMessages({
-            limit: 100,
-            before: fetched4.last().id
-        })).catch(console.error);
+        bot.guilds.cache.get(config.CARLServer).channels.cache.get(config.Repository).messages.fetch({ limit: 100 }, true)
+            .then(fetched => bot.guilds.cache.get(config.CARLServer).channels.cache.get(config.Repository).messages.fetch({ limit: 100, before: fetched.first().id }, true))
+            .then(fetched => bot.guilds.cache.get(config.CARLServer).channels.cache.get(config.Repository).messages.fetch({ limit: 100, before: fetched.first().id }, true))
+            .then(fetched => bot.guilds.cache.get(config.CARLServer).channels.cache.get(config.Repository).messages.fetch({ limit: 100, before: fetched.first().id }, true))
+            .then(fetched => bot.guilds.cache.get(config.CARLServer).channels.cache.get(config.Repository).messages.fetch({ limit: 100, before: fetched.first().id }, true))
+            .catch(err => console.error(err));
 
-        message.guild.channels.get(config.Repository).messages.map(a => {
+        message.guild.channels.cache.get(config.Repository).messages.cache.map(a => {
             if (a.attachments.size && a.createdTimestamp > date) {
-                msgAttachments.push(a.attachments.first().filename);
+                // console.log(a);
+                msgAttachments.push(a.attachments.first().name);
                 msgUrl.push(a.url);
             }
         });
 
-        const embed = new Discord.RichEmbed().setTitle('Setup search results').setColor('#FF5555').setFooter('Only up to 25 latest setups shown due to Discord limitations');
+        const embed = new Discord.MessageEmbed().setTitle('Setup search results').setColor('#FF5555').setFooter('Only up to 25 latest setups shown due to Discord limitations');
         let k = 0;
         for (const [i, f] of msgAttachments.entries()) {
             if (args.every(subs => f.toLowerCase().includes(subs.toLowerCase()))) {
@@ -72,8 +73,8 @@ module.exports = {
             }
             if (k === 25) break;
         }
-        if (!embed.fields.length) return searching.edit('No results found.').then(searching.delete(5000));
-        searching.edit('Found!').then(searching.delete(5000));
+        if (!embed.fields.length) return searching.edit('No results found.');
+        searching.edit('Found!').then(searching.delete({ timeout: 5000 }));
         message.channel.send(embed);
     }
 }

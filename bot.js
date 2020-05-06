@@ -2,7 +2,7 @@ const { token, prefix, CARLServer, Repository } = require('./config.json');
 const Discord = require('discord.js');
 const bot = new Discord.Client({
     disableEveryone: true,
-    messageCacheMaxSize: 500
+    messageCacheMaxSize: 1000
 });
 const fs = require('fs');
 
@@ -13,15 +13,15 @@ const commandFiles = fs.readdirSync('./cmds').filter(file => file.endsWith('.js'
 for (const file of commandFiles) {
     const command = require(`./cmds/${file}`);
     bot.commands.set(command.name, command);
-    console.log(`${command.name} loaded`);
+    // console.log(`${command.name} loaded`);
 }
 
 bot.login(token);
 
 bot.on('ready', async () => {
     console.log(`Bot logged in as ${bot.user.username}`);
-    console.log(bot.guilds.first().name);
-    bot.guilds.get(CARLServer).members.get(bot.user.id).setNickname('Democratic Bot').catch(console.error);
+    // console.log(bot.guilds.cache.first().name);
+    bot.guilds.cache.get(CARLServer).members.cache.get(bot.user.id).setNickname('Democratic Bot').catch(console.error);
 
     // try {
     //     const invite = await bot.generateInvite(['SEND_MESSAGES', 'EMBED_LINKS', 'ATTACH_FILES', 'READ_MESSAGE_HISTORY']);
@@ -29,24 +29,12 @@ bot.on('ready', async () => {
     // } catch (error) {
     //     console.error(error);
     // }
-    bot.guilds.get(CARLServer).channels.get(Repository).fetchMessages({
-        limit: 100
-    }).then(fetched1 => bot.guilds.get(CARLServer).channels.get(Repository).fetchMessages({
-        limit: 100,
-        before: fetched1.last().id
-    })).then(fetched2 => bot.guilds.get(CARLServer).channels.get(Repository).fetchMessages({
-        limit: 100,
-        before: fetched2.last().id
-    })).then(fetched3 => bot.guilds.get(CARLServer).channels.get(Repository).fetchMessages({
-        limit: 100,
-        before: fetched3.last().id
-    })).then(fetched4 => bot.guilds.get(CARLServer).channels.get(Repository).fetchMessages({
-        limit: 100,
-        before: fetched4.last().id
-    })).then(fetched5 => bot.guilds.get(CARLServer).channels.get(Repository).fetchMessages({
-        limit: 100,
-        before: fetched5.last().id
-    })).catch(console.error);
+    bot.guilds.cache.get(CARLServer).channels.cache.get(Repository).messages.fetch({ limit: 100 }, true)
+        .then(fetched => bot.guilds.cache.get(CARLServer).channels.cache.get(Repository).messages.fetch({ limit: 100, before: fetched.first().id }, true))
+        .then(fetched => bot.guilds.cache.get(CARLServer).channels.cache.get(Repository).messages.fetch({ limit: 100, before: fetched.first().id }, true))
+        .then(fetched => bot.guilds.cache.get(CARLServer).channels.cache.get(Repository).messages.fetch({ limit: 100, before: fetched.first().id }, true))
+        .then(fetched => bot.guilds.cache.get(CARLServer).channels.cache.get(Repository).messages.fetch({ limit: 100, before: fetched.first().id }, true))
+        .catch(err => console.error(err));
 });
 
 bot.on('message', async (message) => {
@@ -69,7 +57,7 @@ bot.on('message', async (message) => {
         } catch (error) {
             console.error(error);
             message.channel.send('Helpful error message');
-            message.guild.members.get('197530293597372416').send(error);
+            message.guild.members.cache.get('197530293597372416').send(error);
         }
     }
 });
