@@ -17,6 +17,6 @@
   },
   "homepage": "https://github.com/gearysw/setup-bot#readme",
   "dependencies": {
-    "discord.js": "^12.2.0"
+    "discord.js": "^12.5.1"
   }
 }
