@@ -1,63 +1,52 @@
-const { token, prefix, CARLServer, Repository } = require('./config.json');
-const Discord = require('discord.js');
-const bot = new Discord.Client({
-    disableEveryone: true,
-    messageCacheMaxSize: 1000
-});
-const fs = require('fs');
+const { Client, Events, GatewayIntentBits, Collection } = require('discord.js')
+const { token } = require('./config.json')
+const fs = require('fs')
+const path = require('node:path')
 
-bot.commands = new Discord.Collection();
+const bot = new Client({ intents: [GatewayIntentBits.Guilds, GatewayIntentBits.GuildMessages, GatewayIntentBits.MessageContent] })
 
-const commandFiles = fs.readdirSync('./cmds').filter(file => file.endsWith('.js'));
+bot.commands = new Collection()
+const cmdsDir = path.join(__dirname, 'cmds')
+const cmdsFiles = fs.readdirSync(cmdsDir).filter(file => file.endsWith('.js'))
 
-for (const file of commandFiles) {
-    const command = require(`./cmds/${file}`);
-    bot.commands.set(command.name, command);
-    // console.log(`${command.name} loaded`);
+for (const file of cmdsFiles) {
+    const filePath = path.join(cmdsDir, file)
+    const command = require(filePath)
+
+    if ('data' in command && 'execute' in command) {
+        bot.commands.set(command.data.name, command)
+    } else {
+        console.warn(`The command ${file} is missing required fields.`);
+    }
 }
 
-bot.login(token);
+bot.once(Events.ClientReady, c => {
+    console.log(`Logged in as ${c.user.tag}`);
+})
 
-bot.on('ready', async () => {
-    console.log(`Bot logged in as ${bot.user.username}`);
-    // console.log(bot.guilds.cache.first().name);
-    bot.guilds.cache.get(CARLServer).members.cache.get(bot.user.id).setNickname('Democratic Bot').catch(console.error);
+bot.login(token)
 
-    // try {
-    //     const invite = await bot.generateInvite(['SEND_MESSAGES', 'EMBED_LINKS', 'ATTACH_FILES', 'READ_MESSAGE_HISTORY']);
-    //     console.log(invite);
-    // } catch (error) {
-    //     console.error(error);
-    // }
-    bot.guilds.cache.get(CARLServer).channels.cache.get(Repository).messages.fetch({ limit: 100 }, true)
-        .then(fetched => bot.guilds.cache.get(CARLServer).channels.cache.get(Repository).messages.fetch({ limit: 100, before: fetched.first().id }, true))
-        .then(fetched => bot.guilds.cache.get(CARLServer).channels.cache.get(Repository).messages.fetch({ limit: 100, before: fetched.first().id }, true))
-        .then(fetched => bot.guilds.cache.get(CARLServer).channels.cache.get(Repository).messages.fetch({ limit: 100, before: fetched.first().id }, true))
-        .then(fetched => bot.guilds.cache.get(CARLServer).channels.cache.get(Repository).messages.fetch({ limit: 100, before: fetched.first().id }, true))
-        .catch(err => console.error(err));
-});
+bot.on(Events.InteractionCreate, async interaction => {
+    if (!interaction.isChatInputCommand) return
 
-bot.on('message', async (message) => {
-    if (message.author.bot) return; //*  ignores messages made by bots
-    if (message.channel.type === ('dm' || 'group')) return; //* ignores messages outside of channels
-    if (message.content.toLowerCase().includes('\`')) return; //* ignores messages with code blocks
+    const command = interaction.client.commands.get(interaction.commandName)
 
-    const args = message.content.toLowerCase().split(/ +/);
-    const commandName = args.shift();
-
-    if (commandName.startsWith(prefix)) { //* dynamic command handler
-        try {
-            const cmds = commandName.slice(prefix.length);
-            const command = bot.commands.get(cmds) || bot.commands.find(cmd => cmd.aliases && cmd.aliases.includes(cmds));
-            if (cmds.includes(prefix)) return;
-            if (!command) return;
-            if (command.args && !args.length) return message.channel.send('You need to provide arguments for that command.');
-
-            command.execute(bot, message, args);
-        } catch (error) {
-            console.error(error);
-            message.channel.send('Helpful error message');
-            message.guild.members.cache.get('197530293597372416').send(error);
-        }
+    if (!command) {
+        interaction.reply({
+            content: 'What are you on about?',
+            ephemeral: true
+        })
+        console.error(`No command ${interaction.commandName} found`)
+        return
     }
-});
+
+    try {
+        await command.execute(interaction)
+    } catch (error) {
+        console.error(error)
+        await interaction.reply({
+            content: 'Error executing this command',
+            ephemeral: true
+        })
+    }
+})
