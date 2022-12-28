@@ -3,6 +3,7 @@ const { twitchClientId, twitchSecret, twitchToken, twitchRefreshToken } = requir
 const path = require('node:path')
 const fs = require('fs/promises')
 const fetch = require('node-fetch')
+const livers = require('../live.json')
 
 const configPath = path.join(process.cwd(), 'config.json')
 
@@ -10,7 +11,7 @@ module.exports = {
     data: new SlashCommandBuilder()
         .setName('clip')
         .setDescription('Create a clip of a currently live channel')
-        .addStringOption(option => option.setName('channel').setDescription('Name of the channel').setRequired(true)),
+        .addStringOption(option => option.setName('channel').setDescription('Name of the channel').setAutocomplete(true).setRequired(true)),
     execute: async (interaction) => {
         await interaction.deferReply()
         const channelName = interaction.options.getString('channel')
@@ -25,6 +26,18 @@ module.exports = {
 
 
         interaction.followUp(clipUrl)
+    },
+    autocomplete: async (interaction) => {
+        const channels = []
+        for (prop in livers) {
+            const channel = livers[prop].channel.split('/').pop()
+            channels.push(channel)
+        }
+
+        const focused = interaction.options.getFocused()
+
+        const filtered = channels.filter(choice => choice.startsWith(focused))
+        await interaction.respond(filtered.map(choice => ({ name: choice, value: choice })))
     }
 }
 

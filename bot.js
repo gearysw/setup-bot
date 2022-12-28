@@ -27,26 +27,41 @@ bot.once(Events.ClientReady, c => {
 bot.login(token)
 
 bot.on(Events.InteractionCreate, async interaction => {
-    if (!interaction.isChatInputCommand) return
+    if (interaction.isChatInputCommand()) {
+        const command = interaction.client.commands.get(interaction.commandName)
 
-    const command = interaction.client.commands.get(interaction.commandName)
+        if (!command) {
+            interaction.reply({
+                content: 'What are you on about?',
+                ephemeral: true
+            })
+            console.error(`No command ${interaction.commandName} found`)
+            return
+        }
 
-    if (!command) {
-        interaction.reply({
-            content: 'What are you on about?',
-            ephemeral: true
-        })
-        console.error(`No command ${interaction.commandName} found`)
-        return
+        try {
+            await command.execute(interaction)
+        } catch (error) {
+            console.error(error)
+            await interaction.reply({
+                content: 'Error executing this command',
+                ephemeral: true
+            })
+        }
+    } else if (interaction.isAutocomplete()) {
+        const command = interaction.client.commands.get(interaction.commandName)
+
+        if (!command) return console.error(`Command ${interaction.commandName} not found`)
+
+        try {
+            await command.autocomplete(interaction)
+        } catch (error) {
+            console.error(error)
+            await interaction.reply({
+                content: 'Error executing this command',
+                ephemeral: true
+            })
+        }
     }
 
-    try {
-        await command.execute(interaction)
-    } catch (error) {
-        console.error(error)
-        await interaction.reply({
-            content: 'Error executing this command',
-            ephemeral: true
-        })
-    }
 })
