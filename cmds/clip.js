@@ -2,7 +2,8 @@ const { SlashCommandBuilder } = require('discord.js')
 const { twitchClientId, twitchSecret, twitchToken, twitchRefreshToken } = require('../config.json')
 const path = require('node:path')
 const fs = require('fs/promises')
-const fetch = require('node-fetch')
+// const fetch = require('node-fetch')
+const fetch = (...args) => import('node-fetch').then(({ default: fetch }) => fetch(...args))
 const livers = require('../live.json')
 
 const configPath = path.join(process.cwd(), 'config.json')
@@ -88,6 +89,7 @@ async function refreshToken() {
     const config = JSON.parse(data)
     config['twitchToken'] = newToken
     await fs.writeFile(configPath, JSON.stringify(config, null, '\t'))
+    console.log('Token refreshed')
     return newToken
 }
 
@@ -100,7 +102,7 @@ async function createClip(channel, token) {
                 'Client-Id': twitchClientId
             }
         })
-
+        // console.log(response.status)
         if (response.status !== 202) {
             return false
         }
